@@ -48,6 +48,8 @@ in {
     jq,
     nix,
     writeScriptBin,
+    python3,
+    nix-index,
     ...
   }:
     utils.writePureShellScript
@@ -56,6 +58,8 @@ in {
       coreutils
       jq
       nix
+      nix-index
+      python3.debian-control
     ]
     ''
       # accroding to the spec, the translator reads the input from a json file
@@ -71,7 +75,7 @@ in {
       pkgsName=$(cat $source/debian/control)
       echo $pkgsName
 
-      cat $source/control
+      cat $source/debian/control
 
       # TODO:
       # read input files/dirs and produce a json file at $outputFile
