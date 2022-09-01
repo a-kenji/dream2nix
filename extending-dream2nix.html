@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Guides</li><li class="chapter-item expanded "><a href="guides/getting-started-python.html"><strong aria-hidden="true">2.</strong> Python: getting started in 10 minutes</a></li><li class="chapter-item expanded affix "><li class="part-title">Subsystems</li><li class="chapter-item expanded "><a href="subsystems/rust.html"><strong aria-hidden="true">3.</strong> Rust</a></li><li class="chapter-item expanded "><a href="subsystems/python.html"><strong aria-hidden="true">4.</strong> Python</a></li><li class="chapter-item expanded affix "><li class="part-title">Concept</li><li class="chapter-item expanded "><a href="intro/architectural-considerations.html"><strong aria-hidden="true">5.</strong> Architectural Considerations</a></li><li class="chapter-item expanded "><a href="intro/nixpkgs-improvements.html"><strong aria-hidden="true">6.</strong> Nixpkgs improvements</a></li><li class="chapter-item expanded "><a href="intro/override-system.html"><strong aria-hidden="true">7.</strong> Override system</a></li><li class="chapter-item expanded "><a href="intro/translators.html"><strong aria-hidden="true">8.</strong> Translators</a></li><li class="chapter-item expanded "><a href="intro/indexers.html"><strong aria-hidden="true">9.</strong> Indexers</a></li><li class="chapter-item expanded affix "><li class="part-title">Contributing</li><li class="chapter-item expanded "><a href="extending-dream2nix.html" class="active"><strong aria-hidden="true">10.</strong> Extending dream2nix</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">11.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Development Roundups</li><li class="chapter-item expanded "><a href="development-roundups/2022-april-june.html"><strong aria-hidden="true">12.</strong> April - June 2022</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">Guides</li><li class="chapter-item expanded "><a href="guides/getting-started-python.html"><strong aria-hidden="true">2.</strong> Python: getting started in 10 minutes</a></li><li class="chapter-item expanded "><a href="guides/getting-started-nodejs.html"><strong aria-hidden="true">3.</strong> Node.js: quickstart</a></li><li class="chapter-item expanded affix "><li class="part-title">Subsystems</li><li class="chapter-item expanded "><a href="subsystems/rust.html"><strong aria-hidden="true">4.</strong> Rust</a></li><li class="chapter-item expanded "><a href="subsystems/python.html"><strong aria-hidden="true">5.</strong> Python</a></li><li class="chapter-item expanded "><a href="subsystems/node.html"><strong aria-hidden="true">6.</strong> Node.js</a></li><li class="chapter-item expanded "><a href="subsystems/haskell.html"><strong aria-hidden="true">7.</strong> Haskell</a></li><li class="chapter-item expanded "><a href="subsystems/php.html"><strong aria-hidden="true">8.</strong> PHP</a></li><li class="chapter-item expanded affix "><li class="part-title">Concepts</li><li class="chapter-item expanded "><a href="intro/architectural-considerations.html"><strong aria-hidden="true">9.</strong> Architectural Considerations</a></li><li class="chapter-item expanded "><a href="intro/nixpkgs-improvements.html"><strong aria-hidden="true">10.</strong> Nixpkgs improvements</a></li><li class="chapter-item expanded "><a href="intro/override-system.html"><strong aria-hidden="true">11.</strong> Override system</a></li><li class="chapter-item expanded "><a href="intro/translators.html"><strong aria-hidden="true">12.</strong> Translators</a></li><li class="chapter-item expanded "><a href="intro/indexers.html"><strong aria-hidden="true">13.</strong> Indexers</a></li><li class="chapter-item expanded "><a href="intro/fetchers.html"><strong aria-hidden="true">14.</strong> Fetchers</a></li><li class="chapter-item expanded affix "><li class="part-title">Contributing</li><li class="chapter-item expanded "><a href="extending-dream2nix.html" class="active"><strong aria-hidden="true">15.</strong> Extending dream2nix</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">16.</strong> Contributing</a></li><li class="chapter-item expanded affix "><li class="part-title">Development Roundups</li><li class="chapter-item expanded "><a href="development-roundups/2022-april-june.html"><strong aria-hidden="true">17.</strong> April - June 2022</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -137,6 +137,10 @@
                         <h1 id="extending-dream2nix-with-external-translators-builders-etc"><a class="header" href="#extending-dream2nix-with-external-translators-builders-etc">Extending dream2nix with external translators, builders etc.</a></h1>
 <p><code>dream2nix</code> can be extended while you are <code>init</code>ializing it. This can be done in a few ways.
 For extending, you need to utilize the <code>config.extra</code> option of the dream2nix config.</p>
+<h2 id="module-system-transition"><a class="header" href="#module-system-transition">Module System Transition</a></h2>
+<p>The dream2nix architecture is currently in the process of being refactored into nixos modules. The actual APIs can deviate from what is described in this document.
+For up-to-date examples see <code>/examples/_d2n-extended</code> and <code>/examples/_d2n-extended-new-subsystem</code>
+Once the transition is completed we will update this document and remove this notice.</p>
 <h2 id="declare-extras-from-a-nix-file"><a class="header" href="#declare-extras-from-a-nix-file">Declare <code>extra</code>s from a nix file</a></h2>
 <pre><code class="language-nix">dream2nix.lib.init {
   # this also works around errors with function modules
@@ -145,14 +149,14 @@ For extending, you need to utilize the <code>config.extra</code> option of the d
 }
 </code></pre>
 <p>this file should look like this:</p>
-<pre><code class="language-nix">{dlib, lib, config, ...}:
+<pre><code class="language-nix">{ dlib, lib, config, ... }:
 {
   subsystems.rust.translators.example-translator = ./rust-translator.nix;
   # you can declare modules using functions here
   fetchers.ipfs = {...}: {/* fetcher attrs */};
 }
 </code></pre>
-<p>See the <a href="https://github.com/nix-community/dream2nix/tree/main/examples/d2n-extended-new-subsystem"><code>d2n-extended-new-subsystem</code> example</a> for a basic example.</p>
+<p>See the <a href="https://github.com/nix-community/dream2nix/tree/main/examples/_d2n-extended-new-subsystem"><code>d2n-extended-new-subsystem</code> example</a> for a basic example.</p>
 <h2 id="declare-extras-as-an-attribute-set"><a class="header" href="#declare-extras-as-an-attribute-set">Declare <code>extra</code>s as an attribute set</a></h2>
 <pre><code class="language-nix">dream2nix.lib.init {
   config.extra = {
@@ -173,7 +177,7 @@ For extending, you need to utilize the <code>config.extra</code> option of the d
 </code></pre>
 <p>note: you can't declare modules using functions here.
 This is because the <code>config</code> may need to be serialized to JSON and passed around in impure situations (mostly impure translators).</p>
-<p>See the <a href="https://github.com/nix-community/dream2nix/tree/main/examples/d2n-extended/flake.nix"><code>d2n-extended</code> example</a> for a basic example.</p>
+<p>See the <a href="https://github.com/nix-community/dream2nix/tree/main/examples/_d2n-extended/flake.nix"><code>d2n-extended</code> example</a> for a basic example.</p>
 <h2 id="compose-multiple-different-extras"><a class="header" href="#compose-multiple-different-extras">Compose multiple different <code>extra</code>s</a></h2>
 <p>This allows one to compose multiple <code>extra</code>s together with ease.
 The <code>dream2nixExtras</code> flake output in this case can be any of the approaches explained in this document for declaring <code>config.extra</code>.</p>
@@ -192,7 +196,7 @@ The <code>dream2nixExtras</code> flake output in this case can be any of the app
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="intro/indexers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="intro/fetchers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                             <a rel="next" href="contributing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
@@ -204,7 +208,7 @@ The <code>dream2nixExtras</code> flake output in this case can be any of the app
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="intro/indexers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="intro/fetchers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                     <a rel="next" href="contributing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
