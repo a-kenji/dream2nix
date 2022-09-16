@@ -349,11 +349,9 @@ in let
             allPackages;
 
           defaultPackage =
-            allPackages
-            ."${dreamLockInterface.defaultPackageName}"
-            ."${dreamLockInterface.defaultPackageVersion}";
+            allPackages."${dreamLockInterface.defaultPackageName}"."${dreamLockInterface.defaultPackageVersion}" or null;
         in
-          latestPackages // {default = defaultPackage;};
+          latestPackages // (lib.optionalAttrs (allPackages == null) {default = defaultPackage;});
       };
   in
     formattedOutputs;
@@ -461,23 +459,25 @@ in let
     # list of projects extended with some information requried for processing
     projectsList =
       l.map
-      (project: (let
-        self =
-          project
-          // rec {
-            dreamLock =
-              (utils.readDreamLock {
-                dreamLock = "${toString config.projectRoot}/${project.dreamLockPath}";
-              })
-              .lock;
-            impure = isImpure project translator;
-            invalidationHash = getInvalidationHash project;
-            key = getProjectKey project;
-            resolved = isResolved self;
-            translator = project.translator or (l.head project.translators);
-          };
-      in
-        self))
+      (project: (
+        let
+          self =
+            project
+            // rec {
+              dreamLock =
+                (utils.readDreamLock {
+                  dreamLock = "${toString config.projectRoot}/${project.dreamLockPath}";
+                })
+                .lock;
+              impure = isImpure project translator;
+              invalidationHash = getInvalidationHash project;
+              key = getProjectKey project;
+              resolved = isResolved self;
+              translator = project.translator or (l.head project.translators);
+            };
+        in
+          self
+      ))
       discoveredProjects;
 
     # projects without existing valid dream-lock.json

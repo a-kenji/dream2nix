@@ -112,8 +112,8 @@
     in
     {
       inherit
-        defaultPackage
-        packages
+        # defaultPackage
+        # packages
         devShells
         ;
       # devShells = {
